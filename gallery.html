@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Spot Gallery</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Study Spot Finder</h1>
+    <button class="nav-toggle" onclick="document.querySelector('nav').classList.toggle('active')">☰</button>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="map.html">Map</a>
+      <a href="camera.html">Camera</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Saved Study Spot Images</h2>
+    <div id="gallery"></div>
+  </main>
+
+    <script>
+    const gallery = document.getElementById('gallery');
+    const data = JSON.parse(localStorage.getItem('studyPosts')) || [];   //call 'studyPosts' for the input to be display
+
+    function renderGallery() {
+      gallery.innerHTML = '';
+
+      if (data.length > 0) {
+        data.forEach((entry, index) => {
+          const container = document.createElement('div');
+          container.className = 'gallery-item'; // Add class for styling
+
+          const img = document.createElement('img');
+          img.src = entry.image;
+          img.alt = entry.spot;
+
+          const title = document.createElement('h3');
+          title.textContent = `📍 ${entry.spot}`;
+
+          const review = document.createElement('p');
+          review.textContent = `📝 ${entry.review}`;
+
+          const mapBtn = document.createElement('button');
+          mapBtn.textContent = "View on Map";
+          mapBtn.onclick = () => {
+            localStorage.setItem('gotoLocation', JSON.stringify({
+              lat: entry.lat,
+              lon: entry.lon,
+              spot: entry.spot
+            }));
+            window.location.href = "map.html";
+          };
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = "🗑️ Delete";
+          deleteBtn.onclick = () => {
+            if (confirm("Are you sure you want to delete this entry?")) {
+              data.splice(index, 1);
+              localStorage.setItem('studyPosts', JSON.stringify(data));
+              renderGallery();
+            }
+          };
+
+          const editBtn = document.createElement('button');
+          editBtn.textContent = "✏️ Edit";
+          editBtn.onclick = () => {
+            const newReview = prompt("Edit your review:", entry.review);
+            if (newReview !== null && newReview.trim() !== "") {
+              data[index].review = newReview;
+              localStorage.setItem('studyPosts', JSON.stringify(data));
+              renderGallery();
+            }
+          };
+
+          container.appendChild(img);
+          container.appendChild(title);
+          container.appendChild(review);
+          container.appendChild(mapBtn);
+          container.appendChild(editBtn);
+          container.appendChild(deleteBtn);
+          gallery.appendChild(container);
+        });
+      } else {
+        gallery.textContent = 'No images saved yet.';
+      }
+    }
+
+    renderGallery();
+
+    </script>
+
+</body>
+</html>

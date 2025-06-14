@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Capture Study Spot</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Study Spot Finder</h1>
+    <button class="nav-toggle" onclick="document.querySelector('nav').classList.toggle('active')">☰</button>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="map.html">Map</a>
+      <a href="gallery.html">Gallery</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Upload Study Spot Review</h2>
+
+    <!-- Select spot -->
+    <label for="spotSelect">Choose a Study Spot:</label>
+    <select id="spotSelect">
+      <option value="">--Select--</option>
+      <option value="PSNZ Library">📚 PSNZ Library</option>
+      <option value="Kompleks Kuliah">🏫 Kompleks Kuliah</option>
+      <option value="UMT Convention Centre">🏢 UMT Convention Centre</option>
+      <option value="FSKM">💻 FSKM</option>
+      <option value="FPSM">🧪 FPSM</option>
+      <option value="FSSM">🧪 FSSM</option>
+      <option value="FPEPS">📈 FPEPS</option>
+      <option value="FTKK">🛠️ FTKK</option>
+      <option value="Pusat Islam">🕌 Pusat Islam</option>
+      <option value="KKSAM">☕ KKSAM</option>
+      <option value="Kafeteria Abdul Rahman Limbong">☕ Kafeteria Abdul Rahman Limbong</option>
+      <option value="Kompleks Siswa">🏢 Kompleks Siswa</option>
+    </select>
+
+  <!-- Review -->
+  <label for="review">Your Review:</label>
+  <textarea id="review" rows="3" placeholder="Write your review..."></textarea>
+
+
+<div class="camera-container">
+
+  <!-- Image input -->
+  <label for="cameraInput">Capture or Upload Image:</label>
+  <input type="file" accept="image/*" capture="environment" id="cameraInput">
+
+  <!-- Preview image -->
+  <div id="preview"></div>
+
+  <!-- Save button -->
+  <button id="saveBtn">Save Spot</button>
+
+  </main>
+
+  <script>
+    const input = document.getElementById('cameraInput');
+    const preview = document.getElementById('preview');
+    const saveBtn = document.getElementById('saveBtn');
+
+    let currentImage = "";
+
+    // Coordinates for each study spot
+    const spotCoordinates = {
+      "PSNZ Library": [5.40827, 103.08798],
+      "Kompleks Kuliah": [5.41235, 103.08684],
+      "UMT Convention Centre": [5.41170, 103.08754],
+      "FSKM": [5.41080, 103.08882],
+      "FPSM": [5.40974, 103.08600],
+      "FSSM": [5.41191, 103.08561],
+      "FPEPS": [5.41077, 103.08719],
+      "FTKK": [5.40900, 103.08820], // placeholder, adjust if needed
+      "Pusat Islam": [5.40709, 103.09046],
+      "KKSAM": [5.40505, 103.09167],
+      "Kafeteria Abdul Rahman Limbong": [5.40517, 103.09392],
+      "Kompleks Siswa": [5.40640, 103.08927]
+    };
+
+    input.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        currentImage = event.target.result;
+        const img = document.createElement('img');
+        img.src = currentImage;
+        img.style.width = '100%';
+        preview.innerHTML = '';
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    saveBtn.addEventListener('click', () => {
+      const spot = document.getElementById('spotSelect').value;
+      const review = document.getElementById('review').value;
+
+      if (!spot || !review || !currentImage) {
+        alert("Please select a spot, write a review, and upload an image.");
+        return;
+      }
+
+      const [lat, lon] = spotCoordinates[spot] || [null, null];
+
+      if (lat === null || lon === null) {
+        alert("Coordinates not found for selected spot.");
+        return;
+      }
+
+      const imageData = currentImage;
+      const selectedSpotName = spot;
+      const reviewText = review;
+      const selectedLat = lat;
+      const selectedLon = lon;
+
+      const existingPosts = JSON.parse(localStorage.getItem('studyPosts') || '[]');
+
+      localStorage.setItem('studyPosts', JSON.stringify([...existingPosts, {
+        image: imageData,
+        spot: selectedSpotName,
+        review: reviewText,
+        lat: selectedLat,
+        lon: selectedLon
+      }]));
+
+      alert("✅ Saved! Check it in the gallery.");
+      document.getElementById('spotSelect').value = "";
+      document.getElementById('review').value = "";
+      preview.innerHTML = "";
+      currentImage = "";
+    });
+  </script>
+</div>  
+</body>
+</html>

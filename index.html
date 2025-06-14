@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Spot Finder</title>
+
+  <!-- Local Leaflet CSS -->
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
+
+  <!-- App Styles -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-512.png" type="image/png" />
+
+</head>
+<body>
+  <header>
+    <h1>Study Spot Finder</h1>
+    <button class="nav-toggle" onclick="document.querySelector('nav').classList.toggle('active')">☰</button>
+    <nav>
+      <a href="camera.html">Camera</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="map.html">Full Map</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Homepage Description -->
+    <section class="homepage-intro">
+      <h2>Welcome to Study Spot Finder</h2>
+      <p>
+        Study Spot Finder is a Progressive Web App (PWA) that helps UMT students locate and review study areas on campus.
+        Whether you're looking for strong Wi-Fi, comfort, or peacefulness, this app helps you decide and contribute by adding your own feedback.
+      </p>
+      <ul>
+        <li>📍 Locate study areas on an interactive map</li>
+        <li>📸 Upload photos and write your reviews</li>
+        <li>💬 Explore what others say about each spot</li>
+        <li>📦 Use offline after loading once (PWA)</li>
+      </ul>
+    </section>
+
+    <!-- Map and Description -->
+    <div class="map-layout">
+      <div id="description-box" class="description-box hidden">
+        <button class="close-btn" onclick="document.getElementById('description-box').classList.add('hidden')">×</button>
+        <div id="desc-img" class="desc-images"></div>
+        <h3 id="desc-title">Location Title</h3>
+        <p id="desc-text">Click a marker to see details here.</p>
+      </div>
+      <div id="map-preview"></div>
+    </div>
+
+    <a href="map.html"><button>Open Full Map</button></a>
+  </main>
+
+  <!-- Local Leaflet JS -->
+  <script src="leaflet/leaflet.js" defer></script>
+
+  <!-- Your App Logic -->
+  <script src="app.js" defer></script>
+  <script>
+    function toggleNav() {
+      const nav = document.getElementById("navbar");
+      nav.classList.toggle("active");
+    }
+  </script>
+</body>
+</html>
