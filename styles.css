@@ -32,7 +32,7 @@ header {
   font-size: 1.5em;
   cursor: pointer;
   background: none;
-  border: 2px;
+  border: none;
   color: white;
 }
 
@@ -41,6 +41,7 @@ nav {
   overflow: hidden;
   transition: max-height 0.4s ease;
   background-color: #36005a;
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
@@ -81,6 +82,43 @@ h2 {
   flex-direction: row;
   height: 1000px;
   margin: 1em 0;
+}
+
+.slideshow-container {
+  max-width: 900px;
+  position: relative;
+  margin: 2em auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.slide {
+  display: none;
+  width: 100%;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.caption {
+  position: absolute;
+  bottom: 0;
+  background: rgba(75, 0, 130, 0.6);
+  color: white;
+  width: 100%;
+  padding: 0.5em;
+  text-align: center;
+  font-weight: bold;
+}
+
+@keyframes fadeIn {
+  from {opacity: .4}
+  to {opacity: 1}
 }
 
 /* home desc style */
@@ -230,7 +268,9 @@ textarea {
 
 /* Description box layout */
 #description-box.description-box { 
-  width: 300px;
+  margin-top: 0px;
+  height: 468px;
+  width: 500px;
   max-width: 90%;
   background-color: #ffffff;
   padding: 1em;
@@ -285,13 +325,14 @@ textarea {
   flex-direction: row;
   height: 500px;
   width: 100%;
-  margin-top: 2em;
+  margin-top: 0px;
 }
 
 #map-preview {
-  flex-grow: 1;
   height: 100%;
   width: 100%;
+  margin-top: 0px;
+  padding: 0px;
 }
 
 .homepage-intro {
@@ -336,12 +377,32 @@ textarea {
   #description-box.description-box {
     width: 100%;
     border-right: none;
-    border-bottom: 1px solid #ccc;
-    transform: translateY(-100%);
+    border-top: 1px solid #ccc;
+    border-bottom: none;
+    transform: translateY(100%); /* initially hidden below view */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    height: 40%; /* you can adjust this height */
+    background-color: white;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  #description-box.description-box:not(.hidden) {
+    transform: translateY(0); /* slide up into view */
+    opacity: 1;
   }
 
   #description-box.hidden {
-    transform: translateY(-100%);
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #map-preview {
+    height: 100vh; /* make map fill screen under the sliding box */
   }
 }
 
@@ -397,4 +458,20 @@ textarea {
 .gallery-item p {
   font-size: 0.85em;
   text-align: center;
+}
+
+/* footer */
+footer {
+  background-color: #4B0082;
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+  margin-top: 2em;
+}
+
+.footer-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1em;
+  font-size: 0.9em;
 }
