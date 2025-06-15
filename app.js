@@ -70,6 +70,10 @@ const studySpots = [
   }
 ];
 
+function storeLocation(lat, lon, spot) {
+  localStorage.setItem('gotoLocation', JSON.stringify({ lat, lon, spot }));
+}
+
 function showMap(lat, lon, message = "📍 Your Location") {
   const map = L.map('map-preview').setView([lat, lon], 18);
   document.getElementById('map-preview').style.height = '100%';
@@ -96,7 +100,6 @@ function showMap(lat, lon, message = "📍 Your Location") {
     localStorage.removeItem('gotoLocation');
   }
  
-
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
@@ -109,6 +112,8 @@ function showMap(lat, lon, message = "📍 Your Location") {
     iconAnchor: [12, 24],
     popupAnchor: [0, -24]
   });
+
+  
 
   // 📍 Your current location marker
   L.marker([lat, lon], { icon: emojiIcon }).addTo(map).bindPopup(message).openPopup();
