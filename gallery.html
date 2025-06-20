@@ -3,8 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Study Spot Gallery</title>
+  <title>Study Spot Finder</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- PWA & Icon Configuration -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png" />
+  <link rel="icon" href="icons/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
 </head>
 <body>
   <header>
@@ -22,9 +31,9 @@
     <div id="gallery"></div>
   </main>
 
-    <script>
+  <script>
     const gallery = document.getElementById('gallery');
-    const data = JSON.parse(localStorage.getItem('studyPosts')) || [];   //call 'studyPosts' for the input to be display
+    const data = JSON.parse(localStorage.getItem('studyPosts')) || [];
 
     function renderGallery() {
       gallery.innerHTML = '';
@@ -32,11 +41,13 @@
       if (data.length > 0) {
         data.forEach((entry, index) => {
           const container = document.createElement('div');
-          container.className = 'gallery-item'; // Add class for styling
+          container.className = 'gallery-item';
 
+          // Single image only
           const img = document.createElement('img');
-          img.src = entry.image;
+          img.src = entry.image;  // Expecting one image only
           img.alt = entry.spot;
+          container.appendChild(img);
 
           const title = document.createElement('h3');
           title.textContent = `📍 ${entry.spot}`;
@@ -76,7 +87,6 @@
             }
           };
 
-          container.appendChild(img);
           container.appendChild(title);
           container.appendChild(review);
           container.appendChild(mapBtn);
@@ -90,8 +100,7 @@
     }
 
     renderGallery();
-
-    </script>
+  </script>
   <footer>
     <div class="footer-container">
       <p>&copy; 2025 Study Spot Finder | Made with ❤️ by UMT Students</p>
