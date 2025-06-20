@@ -113,8 +113,6 @@ function showMap(lat, lon, message = "📍 Your Location") {
     popupAnchor: [0, -24]
   });
 
-  
-
   // 📍 Your current location marker
   L.marker([lat, lon], { icon: emojiIcon }).addTo(map).bindPopup(message).openPopup();
 
@@ -192,5 +190,52 @@ if ("serviceWorker" in navigator) {
       .catch(err => console.error("Service Worker registration failed:", err));
   });
 }
-
 }
+
+// MULTIPLE IMAGE POSTS SUPPORT
+document.addEventListener("DOMContentLoaded", () => {
+  const upload = document.getElementById("imageUpload");
+  const gallery = document.getElementById("gallery");
+
+  function loadPosts() {
+    const posts = JSON.parse(localStorage.getItem("spotPosts") || "[]");
+    gallery.innerHTML = "";
+
+    posts.forEach(post => {
+      const postDiv = document.createElement("div");
+      postDiv.className = "post";
+
+      post.images.forEach(src => {
+        const img = document.createElement("img");
+        img.src = src;
+        postDiv.appendChild(img);
+      });
+
+      const time = document.createElement("small");
+      time.textContent = `Posted on: ${new Date(post.timestamp).toLocaleString()}`;
+      postDiv.appendChild(time);
+
+      gallery.prepend(postDiv);
+    });
+  }
+
+  upload?.addEventListener("change", (e) => {
+    const files = Array.from(e.target.files);
+    const readerPromises = files.map(file => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(readerPromises).then(images => {
+      const posts = JSON.parse(localStorage.getItem("spotPosts") || "[]");
+      posts.push({ images, timestamp: Date.now() });
+      localStorage.setItem("spotPosts", JSON.stringify(posts));
+      loadPosts();
+    });
+  });
+
+  loadPosts();
+});
