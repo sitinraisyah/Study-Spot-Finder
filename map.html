@@ -29,13 +29,13 @@
   <main>
     <h2>Interactive Map of Study Spots</h2>
     <div class="map-layout">
-      <div id="description-box" class="description-box hidden">
-        <button class="close-btn" onclick="document.getElementById('description-box').classList.add('hidden')">×</button>
-        <h3 id="desc-title">Location Title</h3>
-        <div id="desc-img" class="desc-images"></div>
-        <p id="desc-text">Click a marker to see details here.</p>
-      </div>
       <div id="map-preview"></div>
+      <div id="description-box" class="description-box hidden">
+        <button class="close-btn" onclick="hideDesc()">✖</button>
+        <h3 id="desc-title"></h3>
+        <p id="desc-text"></p>
+        <div id="desc-img"></div>
+      </div>
     </div>
   </main>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
