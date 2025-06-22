@@ -54,15 +54,14 @@
 
     <!-- Map Section -->
     <div class="map-layout">
+      <div id="map-preview"></div>         <!-- Appears on the RIGHT (desktop) -->
       <div id="description-box" class="description-box hidden">
-        <button class="close-btn" onclick="document.getElementById('description-box').classList.add('hidden')">×</button>
-        <div id="desc-img" class="desc-images"></div>
-        <h3 id="desc-title">Location Title</h3>
-        <p id="desc-text">Click a marker to see details here.</p>
+        <button class="close-btn" onclick="hideDesc()">✖</button>
+        <h3 id="desc-title"></h3>
+        <p id="desc-text"></p>
+        <div id="desc-img"></div>
       </div>
-      <div id="map-preview"></div>
     </div>
-
     <a href="map.html"><button>Open Full Map</button></a>
   </main>
 
