@@ -100,9 +100,7 @@ function showMap(lat, lon, message = "📍 Your Location") {
     localStorage.removeItem('gotoLocation');
   }
  
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', ).addTo(map);
 
   // 📍 Use emoji as marker icon
   const emojiIcon = L.divIcon({
@@ -129,37 +127,48 @@ function showMap(lat, lon, message = "📍 Your Location") {
 
     marker.on('click', () => {
       // Toggle off if same marker clicked again
-      if (activeMarker === marker && !descBox.classList.contains('hidden')) {
-        descBox.classList.add('hidden');
+      if (activeMarker === marker && descBox.classList.contains('show')) {
+        hideDesc();
         activeMarker = null;
       } else {
-        // Show description box
         descBox.classList.remove('hidden');
+        descBox.classList.add('show');
         descTitle.textContent = spot.title;
         descText.textContent = spot.desc;
-        descImg.innerHTML = ""; // Clear previous
+        descImg.innerHTML = "";
 
-        if (Array.isArray(spot.img)) {
-          spot.img.forEach(imgPath => {
-            const img = document.createElement('img');
-            img.src = imgPath;
-            img.alt = spot.title;
-            descImg.appendChild(img);
-          });
-        } else {
+        // populate images
+        spot.img.forEach(imgPath => {
           const img = document.createElement('img');
-          img.src = spot.img;
+          img.src = imgPath;
           img.alt = spot.title;
-          img.style.borderRadius = "8px";
           descImg.appendChild(img);
-        }
+        });
 
         activeMarker = marker;
       }
     });
+    
+    function showDescriptionBox(content) {
+    const box = document.getElementById('description-box');
+    box.innerHTML = content;
+    box.classList.remove('hidden');
+    box.classList.add('show');
+  }
+
+    function hideDescriptionBox() {
+      const box = document.getElementById('description-box');
+      box.classList.remove('show');
+      box.classList.add('hidden');
+    }
   });
 }
 
+    function hideDesc() {
+    const box = document.getElementById('description-box');
+    box.classList.remove('show');
+    box.classList.add('hidden');
+  }
 // Try to get user location
 if ('geolocation' in navigator) {
   navigator.geolocation.getCurrentPosition(
